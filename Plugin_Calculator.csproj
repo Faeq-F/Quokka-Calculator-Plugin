@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net6.0-windows</TargetFramework>
+	<Nullable>enable</Nullable>
+	<UseWPF>true</UseWPF>
+	<PublishSingleFile>true</PublishSingleFile>
+	<SelfContained>true</SelfContained>
+	<DebugType>embedded</DebugType>
+	<Product>Plugin_Calculator</Product>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	<BaseOutputPath>G:\Quokka\Quokka\PlugBoard\Plugin_Calculator</BaseOutputPath>
+	<Configurations>Debug;Release;Plugin</Configurations>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <PropertyGroup>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+	<ProjectReference Include="..\Quokka\Quokka.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+	<PackageReference Include="Dangl.Calculator" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+	<Compile Update="ContextPane.xaml.cs">
+	  <SubType>Code</SubType>
+	</Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+	<Page Update="ContextPane.xaml">
+	  <SubType>Designer</SubType>
+	</Page>
+  </ItemGroup>
+
+</Project>
