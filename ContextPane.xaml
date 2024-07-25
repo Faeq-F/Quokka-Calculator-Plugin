@@ -1,15 +1,329 @@
 ﻿<src:ItemContextPane
-    x:Class="Plugin_Calculator.ContextPane"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:src="clr-namespace:Quokka.ListItems;assembly=Quokka"
-    Title="ContextPane"
-    d:DesignHeight="300"
-    d:DesignWidth="800"
-    UseLayoutRounding="True"
-    mc:Ignorable="d">
+  x:Class="Plugin_Calculator.ContextPane"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:Plugin_Calculator"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:src="clr-namespace:Quokka.ListItems;assembly=Quokka"
+  Title="ContextPane"
+  d:DesignHeight="300"
+  d:DesignWidth="800"
+  KeyDown="Page_KeyDown"
+  UseLayoutRounding="True"
+  mc:Ignorable="d">
+  <Page.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Quokka;component/SearchWindow/ScrollBar.xaml" />
+        <ResourceDictionary>
+          <x:Array x:Key="SupportedFunctions" Type="local:SupportedFunction">
+            <local:SupportedFunction Description="Round down to zero accuracy" Expression="FLOOR  expression" />
+            <local:SupportedFunction Description="Round up to zero accuracy" Expression="CEIL  expression" />
+            <local:SupportedFunction Description="Absolute value" Expression="ABS  expression" />
+            <local:SupportedFunction Description="Round expr_1 with expr_2 accuracy" Expression="ROUNDK '(' expression ';' expression ')'" />
+            <local:SupportedFunction Description="Round with zero accuracy" Expression="ROUND  expression" />
+            <local:SupportedFunction Description="Trim decimal digits" Expression="TRUNC  expression" />
+            <local:SupportedFunction Description="Sinus" Expression="SIN  expression" />
+            <local:SupportedFunction Description="Cosinus" Expression="COS  expression" />
+            <local:SupportedFunction Description="Tangens" Expression="TAN  expression" />
+            <local:SupportedFunction Description="Cotangens" Expression="COT  expression" />
+            <local:SupportedFunction Description="Sinus Hypererbolicus" Expression="SINH  expression" />
+            <local:SupportedFunction Description="Cosinus Hyperbolicus" Expression="COSH  expression" />
+            <local:SupportedFunction Description="Tangens Hyperbolicus" Expression="TANH  expression" />
+            <local:SupportedFunction Description="Inverse Sinus" Expression="ARCSIN  expression" />
+            <local:SupportedFunction Description="Inverse Cosinus" Expression="ARCCOS  expression" />
+            <local:SupportedFunction Description="Inverse Tangens" Expression="ARCTAN  expression" />
+            <local:SupportedFunction Description="Atan2" Expression="ARCTAN2 '(' expression ';' expression ')'" />
+            <local:SupportedFunction Description="Inverse Cotangens" Expression="ARCCOT  expression" />
+            <local:SupportedFunction Description="e ^ expr" Expression="EXP  expression" />
+            <local:SupportedFunction Description="Logarithm to e" Expression="LN  expression" />
+            <local:SupportedFunction Description="10 ^ expr" Expression="EEX  expression" />
+            <local:SupportedFunction Description="Logarithm to 10" Expression="LOG  expression" />
+            <local:SupportedFunction Description="Angle to radians (360° base)" Expression="RAD  expression" />
+            <local:SupportedFunction Description="Radians to angle (360° base)" Expression="DEG  expression" />
+            <local:SupportedFunction Description="Square root" Expression="SQRT expression" />
+            <local:SupportedFunction Description="Square product" Expression="SQR expression" />
+            <local:SupportedFunction Description="expr_1 to the expr_2 th power" Expression="expression op = ('^'|'**') expression" />
+            <local:SupportedFunction Description="Modulo" Expression="expression (MOD | '%' ) expression" />
+            <local:SupportedFunction Description="Whole part of division rest" Expression="expression DIV expression" />
+            <local:SupportedFunction Description="expr_1 nth root of expr_2" Expression="expression op = ('~'|'//') expression" />
+            <local:SupportedFunction Description="Multiplication or division" Expression="expression op = ('*'|'/') expression" />
+            <local:SupportedFunction Description="Addition or subtraction" Expression="expression op = ('+'|'-') expression" />
+            <local:SupportedFunction Description="Single integer or float number" Expression="NUMBER" />
+            <local:SupportedFunction Description="Minimum" Expression="MIN '(' expression (';' expression)* ')'" />
+            <local:SupportedFunction Description="Maximum" Expression="MAX '(' expression (';' expression)* ')'" />
+            <local:SupportedFunction Description="Description within parentheses" Expression="'(' expression ')'" />
+            <local:SupportedFunction Description="Mathematical constant pi = 3,141593" Expression="PI '()'?" />
+            <local:SupportedFunction Description="Exponent, e.g. 10e+43" Expression="expression E+ expression" />
+            <local:SupportedFunction Description="Inverted Exponent, e.g. 10e-43" Expression="expression E- expression" />
+            <local:SupportedFunction Description="Mathematical constant e = 2,718282" Expression="EULER" />
+            <local:SupportedFunction Description="Unary minus sign (negative numbers)" Expression="'-' expression" />
+            <local:SupportedFunction Description="Unary plus sign (positive numbers)" Expression="'+' expression" />
+            <local:SupportedFunction Description="Expression without multiplication sign, e.g. 2(3) -&gt; 2*(3)" Expression="'(' expression ')' expression" />
+            <local:SupportedFunction Description="Expression without multiplication sign, e.g. 2(3) -&gt; 2*(3)" Expression="expression '(' expression ')'" />
+            <local:SupportedFunction Description="Comments in Formulas. E.g., 4'Length'*3'Width' resolves to 12" Expression="... /* text */... or, ... ' text ' ... or, ... &quot; text &quot; ..." />
+            <local:SupportedFunction Description="Trailing comments terminating formulas. E.g., 1 + 3; As per our counting" Expression="expression; text" />
+          </x:Array>
+        </ResourceDictionary>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Page.Resources>
+  <Border
+    Width="auto"
+    Height="auto"
+    MinHeight="{DynamicResource ContextPaneMinHeight}"
+    d:Background="#f3f3f3"
+    d:BorderBrush="#e5e5e5"
+    d:BorderThickness="1"
+    d:CornerRadius="15"
+    d:MinHeight="64"
+    Background="{DynamicResource ContextPaneBgColor}"
+    BorderBrush="{DynamicResource ContextPaneBorderColor}"
+    BorderThickness="{DynamicResource ContextPaneBorderThickness}"
+    CornerRadius="{DynamicResource ContextPaneCornerRounding}">
+    <DataGrid
+      x:Name="SupportedFunctionsTable"
+      AutoGenerateColumns="True"
+      ColumnWidth="0.5*"
+      ItemsSource="{Binding Source={StaticResource SupportedFunctions}}">
 
-    <Grid />
+
+      <DataGrid.Resources>
+
+        <!--  Style and template for the DataGrid.  -->
+        <Style TargetType="{x:Type DataGrid}">
+          <Setter d:Value="Aqua" Property="Foreground" Value="{DynamicResource GridRowTxtColor}" />
+          <Setter d:Value="12" Property="FontSize" Value="{DynamicResource GridRowTxtSize}" />
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type DataGrid}">
+                <Border
+                  x:Name="border"
+                  Margin="{DynamicResource GridMargin}"
+                  Padding="{DynamicResource GridPadding}"
+                  d:Background="red"
+                  d:BorderBrush="#e5e5e5"
+                  d:BorderThickness="0"
+                  d:CornerRadius="15"
+                  d:Margin="20"
+                  d:Padding="10"
+                  Background="{DynamicResource GridBackgroundColor}"
+                  BorderBrush="{DynamicResource GridBorderColor}"
+                  BorderThickness="{DynamicResource GridBorderThickness}"
+                  CornerRadius="{DynamicResource GridRounding}"
+                  SnapsToDevicePixels="True">
+                  <ScrollViewer
+                    x:Name="DG_ScrollViewer"
+                    Background="Transparent"
+                    Focusable="false">
+                    <ScrollViewer.Template>
+                      <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                          </Grid.ColumnDefinitions>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                          </Grid.RowDefinitions>
+
+                          <Button
+                            Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                            Command="{x:Static DataGrid.SelectAllCommand}"
+                            Focusable="false"
+                            Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle,
+                                                                          TypeInTargetAssembly={x:Type DataGrid}}}"
+                            Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+
+                          <DataGridColumnHeadersPresenter
+                            x:Name="PART_ColumnHeadersPresenter"
+                            Grid.Column="1"
+                            Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+
+                          <ScrollContentPresenter
+                            x:Name="PART_ScrollContentPresenter"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            CanContentScroll="{TemplateBinding CanContentScroll}" />
+
+                          <ScrollBar
+                            x:Name="PART_VerticalScrollBar"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Maximum="{TemplateBinding ScrollableHeight}"
+                            Orientation="Vertical"
+                            ViewportSize="{TemplateBinding ViewportHeight}"
+                            Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                            Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Grid>
+                      </ControlTemplate>
+                    </ScrollViewer.Template>
+                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                  </ScrollViewer>
+                </Border>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+          <Style.Triggers>
+            <Trigger Property="IsGrouping" Value="true">
+              <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+
+        <!--  Style and template for DataGridCell.  -->
+        <Style TargetType="{x:Type DataGridCell}">
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type DataGridCell}">
+                <Border
+                  x:Name="border"
+                  Background="Transparent"
+                  BorderBrush="Transparent"
+                  BorderThickness="0"
+                  SnapsToDevicePixels="True">
+                  <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                </Border>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+          <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter Property="Foreground" Value="{DynamicResource SelectedGridRowTxtColor}" />
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+
+        <!--  Style and template for the DataGridRow.  -->
+        <Style TargetType="{x:Type DataGridRow}">
+          <Setter Property="SnapsToDevicePixels" Value="true" />
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type DataGridRow}">
+                <Border
+                  x:Name="DGR_Border"
+                  d:Background="Green"
+                  d:BorderBrush="#a97ef4"
+                  d:BorderThickness="1"
+                  d:CornerRadius="5"
+                  Background="{DynamicResource GridRowColor}"
+                  BorderBrush="{DynamicResource GridRowBorderColor}"
+                  BorderThickness="{DynamicResource GridRowBorderThickness}"
+                  CornerRadius="{DynamicResource GridRowRounding}"
+                  SnapsToDevicePixels="True">
+                  <SelectiveScrollingGrid>
+                    <SelectiveScrollingGrid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto" />
+                      <ColumnDefinition Width="*" />
+                    </SelectiveScrollingGrid.ColumnDefinitions>
+                    <SelectiveScrollingGrid.RowDefinitions>
+                      <RowDefinition Height="*" />
+                      <RowDefinition Height="Auto" />
+                    </SelectiveScrollingGrid.RowDefinitions>
+                    <DataGridCellsPresenter
+                      Grid.Column="1"
+                      ItemsPanel="{TemplateBinding ItemsPanel}"
+                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    <DataGridDetailsPresenter
+                      Grid.Row="1"
+                      Grid.Column="1"
+                      SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                      Visibility="{TemplateBinding DetailsVisibility}" />
+                    <DataGridRowHeader
+                      Grid.RowSpan="2"
+                      SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"
+                      Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                  </SelectiveScrollingGrid>
+                </Border>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Style>
+
+        <!--  Style and template for the DataGridRowHeader.  -->
+        <Style TargetType="{x:Type DataGridRowHeader}">
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type DataGridRowHeader}">
+                <Grid Visibility="Collapsed" />
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Style>
+
+        <!--  Style and template for the resize control on the DataGridColumnHeader.  -->
+        <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
+          <Setter Property="Width" Value="8" />
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="Cursor" Value="SizeWE" />
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type Thumb}">
+                <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Style>
+
+        <!--  Style and template for the DataGridColumnHeader.  -->
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+          <Setter Property="VerticalContentAlignment" Value="Center" />
+          <Setter d:Value="Green" Property="Foreground" Value="{DynamicResource GridColumnHeadersTxtColor}" />
+          <Setter d:Value="14" Property="FontSize" Value="{DynamicResource GridColumnHeadersTxtSize}" />
+          <Setter d:Value="Medium" Property="FontWeight" Value="{DynamicResource GridColumnHeadersTxtWeight}" />
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                <Grid>
+                  <Border
+                    x:Name="columnHeaderBorder"
+                    Padding="3,0,3,0"
+                    d:Background="Beige"
+                    d:BorderBrush="Pink"
+                    d:BorderThickness="2"
+                    d:CornerRadius="8"
+                    Background="{DynamicResource GridColumnHeadersBackground}"
+                    BorderBrush="{DynamicResource GridColumnHeadersBorderColor}"
+                    BorderThickness="{DynamicResource GridColumnHeadersBorderThickness}"
+                    CornerRadius="{DynamicResource GridColumnHeadersRounding}">
+                    <ContentPresenter
+                      HorizontalAlignment="{DynamicResource GridColumnHeadersHorizontalAlignment}"
+                      VerticalAlignment="Center"
+                      d:HorizontalAlignment="Center"
+                      SnapsToDevicePixels="True" />
+                  </Border>
+                  <Thumb
+                    x:Name="PART_LeftHeaderGripper"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource ColumnHeaderGripperStyle}" />
+                  <Thumb
+                    x:Name="PART_RightHeaderGripper"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource ColumnHeaderGripperStyle}" />
+                </Grid>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Style>
+
+        <!--  Style and template for the DataGridColumnHeadersPresenter.  -->
+        <Style TargetType="{x:Type DataGridColumnHeadersPresenter}">
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type DataGridColumnHeadersPresenter}">
+                <Grid>
+                  <DataGridColumnHeader x:Name="PART_FillerColumnHeader" IsHitTestVisible="False" />
+                  <ItemsPresenter />
+                </Grid>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </DataGrid.Resources>
+    </DataGrid>
+  </Border>
 </src:ItemContextPane>

@@ -1,0 +1,31 @@
+{
+  "SupportedFunctionsGrid": {
+    "GridMargin": "10",
+    "GridPadding": "0",
+    "GridBackgroundColor": "Transparent",
+    "GridBorderColor": "#ddd",
+    "GridBorderThickness": "2",
+    "GridRounding": "8",
+
+    "GridColumnHeaders": {
+      "GridColumnHeadersHorizontalAlignment": "Center",
+      "GridColumnHeadersBackground": "#fff",
+      "GridColumnHeadersBorderColor": "#ddd",
+      "GridColumnHeadersBorderThickness": "0, 0, 2, 2",
+      "GridColumnHeadersRounding": "8, 8, 0, 0",
+      "GridColumnHeadersTxtColor": "Black",
+      "GridColumnHeadersTxtSize": "13",
+      "GridColumnHeadersTxtWeight": "Medium"
+    },
+
+    "GridRows": {
+      "GridRowColor": "#fff",
+      "GridRowBorderColor": "#ddd",
+      "GridRowBorderThickness": "2",
+      "GridRowRounding": "0",
+      "GridRowTxtColor": "#777",
+      "GridRowTxtSize": "12",
+      "SelectedGridRowTxtColor": "Black"
+    }
+  }
+}
