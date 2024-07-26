@@ -6,6 +6,8 @@
     "GridBorderColor": "#ddd",
     "GridBorderThickness": "2",
     "GridRounding": "8",
+    "GridCellBorderColor": "#ddd",
+    "GridCellBorderThickness": "0, 0, 2, 0",
 
     "GridColumnHeaders": {
       "GridColumnHeadersHorizontalAlignment": "Center",
@@ -21,7 +23,7 @@
     "GridRows": {
       "GridRowColor": "#fff",
       "GridRowBorderColor": "#ddd",
-      "GridRowBorderThickness": "2",
+      "GridRowBorderThickness": "0, 2, 3, 0",
       "GridRowRounding": "0",
       "GridRowTxtColor": "#777",
       "GridRowTxtSize": "12",

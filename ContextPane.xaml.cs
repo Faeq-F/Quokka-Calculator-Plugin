@@ -24,6 +24,8 @@ namespace Plugin_Calculator {
       this.Resources.Add("GridBorderColor", (SolidColorBrush) new BrushConverter().ConvertFromString(Calculator.PluginSettings.SupportedFunctionsGrid.GridBorderColor)!);
       this.Resources.Add("GridBorderThickness", parseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridBorderThickness));
       this.Resources.Add("GridRounding", parseCornerRadiusSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRounding));
+      this.Resources.Add("GridCellBorderColor", (SolidColorBrush) new BrushConverter().ConvertFromString(Calculator.PluginSettings.SupportedFunctionsGrid.GridCellBorderColor)!);
+      this.Resources.Add("GridCellBorderThickness", parseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridCellBorderThickness));
       //Column Headers
       this.Resources.Add("GridColumnHeadersHorizontalAlignment", parseHorizontalAlignmentSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersHorizontalAlignment));
       this.Resources.Add("GridColumnHeadersBackground", (SolidColorBrush) new BrushConverter().ConvertFromString(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersBackground)!);

@@ -19,7 +19,7 @@ public class GridRows {
   public string SelectedGridRowTxtColor { get; set; }
 }
 
-internal class PluginSettings {
+public class PluginSettings {
   public SupportedFunctionsGrid SupportedFunctionsGrid { get; set; }
 }
 
@@ -30,6 +30,8 @@ public class SupportedFunctionsGrid {
   public string GridBorderColor { get; set; }
   public string GridBorderThickness { get; set; }
   public string GridRounding { get; set; }
+  public string GridCellBorderColor { get; set; }
+  public string GridCellBorderThickness { get; set; }
   public GridColumnHeaders GridColumnHeaders { get; set; }
   public GridRows GridRows { get; set; }
 }
