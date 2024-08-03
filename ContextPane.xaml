@@ -82,6 +82,7 @@
     BorderBrush="{DynamicResource ContextPaneBorderColor}"
     BorderThickness="{DynamicResource ContextPaneBorderThickness}"
     CornerRadius="{DynamicResource ContextPaneCornerRounding}">
+
     <DataGrid
       x:Name="SupportedFunctionsTable"
       d:FontFamily="Segoe UI"
