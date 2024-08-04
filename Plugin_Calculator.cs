@@ -39,14 +39,14 @@ namespace Plugin_Calculator {
     /// </summary>
     public List<ListItem> OnQueryChange(string query) {
       List<ListItem> ItemList = new();
-
-      object calculation = calculate!.Invoke(null, new object[] { query })!;
-      if ((bool) validityProp!.GetValue(calculation)!) {
-        ItemList.Add(
-            new CalculationItem(resultProp!.GetValue(calculation)!.ToString()!)
-        );
-      }
-
+      try {
+        object? calculation = calculate!.Invoke(null, new object[] { query });
+        if (calculation == null ? false : (bool) validityProp!.GetValue(calculation)) {
+          ItemList.Add(
+              new CalculationItem(resultProp!.GetValue(calculation)!.ToString()!)
+          );
+        }
+      } catch (Exception) { }
       return ItemList;
     }
 

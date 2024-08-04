@@ -6,12 +6,14 @@ using System.Windows.Media;
 using static Quokka.Settings.SettingParsers;
 
 namespace Plugin_Calculator {
+
   /// <summary>
-  /// Interaction logic for ContextPane.xaml
+  /// The context pane for a calculation item
   /// </summary>
   public partial class ContextPane : ItemContextPane {
+
     /// <summary>
-    /// 
+    /// Loads the style settings for the Supported Functions grid
     /// </summary>
     public ContextPane() {
       InitializeComponent();
@@ -47,37 +49,39 @@ namespace Plugin_Calculator {
     }
 
     /// <summary>
+    /// Enter key copies the expression from the selected row.
     /// <inheritdoc/>
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <param name="sender"><inheritdoc/></param>
+    /// <param name="e"><inheritdoc/></param>
     protected override void Page_KeyDown(object sender, KeyEventArgs e) {
       switch (e.Key) {
         case Key.Enter:
           //copy expression from selected row
+          SupportedFunction function = (SupportedFunction) SupportedFunctionsTable.SelectedItem;
+          System.Windows.Clipboard.SetText(function.Expression);
+          ReturnToSearch();
           break;
         case Key.Apps: //This is the menu key
-          base.ReturnToSearch();
+          ReturnToSearch();
           break;
         default:
           return;
       }
       e.Handled = true;
     }
-
-
   }
 
   /// <summary>
-  /// 
+  /// A Supported Function - a row in the grid
   /// </summary>
   public class SupportedFunction {
     /// <summary>
-    /// 
+    /// The expression that is typed out
     /// </summary>
     public string? Expression { get; set; }
     /// <summary>
-    /// 
+    /// Description of the function
     /// </summary>
     public string? Description { get; set; }
   }

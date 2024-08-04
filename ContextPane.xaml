@@ -9,7 +9,6 @@
   Title="ContextPane"
   d:DesignHeight="300"
   d:DesignWidth="800"
-  KeyDown="Page_KeyDown"
   UseLayoutRounding="True"
   mc:Ignorable="d">
   <Page.Resources>
@@ -21,7 +20,7 @@
             <local:SupportedFunction Description="Round down to zero accuracy" Expression="FLOOR  expression" />
             <local:SupportedFunction Description="Round up to zero accuracy" Expression="CEIL  expression" />
             <local:SupportedFunction Description="Absolute value" Expression="ABS  expression" />
-            <local:SupportedFunction Description="Round expr_1 with expr_2 accuracy" Expression="ROUNDK '(' expression ';' expression ')'" />
+            <local:SupportedFunction Description="Round expr_1 with expr_2 accuracy" Expression="ROUNDK ( expression ; expression )" />
             <local:SupportedFunction Description="Round with zero accuracy" Expression="ROUND  expression" />
             <local:SupportedFunction Description="Trim decimal digits" Expression="TRUNC  expression" />
             <local:SupportedFunction Description="Sinus" Expression="SIN  expression" />
@@ -34,7 +33,7 @@
             <local:SupportedFunction Description="Inverse Sinus" Expression="ARCSIN  expression" />
             <local:SupportedFunction Description="Inverse Cosinus" Expression="ARCCOS  expression" />
             <local:SupportedFunction Description="Inverse Tangens" Expression="ARCTAN  expression" />
-            <local:SupportedFunction Description="Atan2" Expression="ARCTAN2 '(' expression ';' expression ')'" />
+            <local:SupportedFunction Description="Atan2" Expression="ARCTAN2 ( expression ; expression )" />
             <local:SupportedFunction Description="Inverse Cotangens" Expression="ARCCOT  expression" />
             <local:SupportedFunction Description="e ^ expr" Expression="EXP  expression" />
             <local:SupportedFunction Description="Logarithm to e" Expression="LN  expression" />
@@ -44,24 +43,24 @@
             <local:SupportedFunction Description="Radians to angle (360° base)" Expression="DEG  expression" />
             <local:SupportedFunction Description="Square root" Expression="SQRT expression" />
             <local:SupportedFunction Description="Square product" Expression="SQR expression" />
-            <local:SupportedFunction Description="expr_1 to the expr_2 th power" Expression="expression op = ('^'|'**') expression" />
-            <local:SupportedFunction Description="Modulo" Expression="expression (MOD | '%' ) expression" />
+            <local:SupportedFunction Description="expr_1 to the expr_2 th power" Expression="expression (^|**) expression" />
+            <local:SupportedFunction Description="Modulo" Expression="expression (MOD|%) expression" />
             <local:SupportedFunction Description="Whole part of division rest" Expression="expression DIV expression" />
-            <local:SupportedFunction Description="expr_1 nth root of expr_2" Expression="expression op = ('~'|'//') expression" />
-            <local:SupportedFunction Description="Multiplication or division" Expression="expression op = ('*'|'/') expression" />
-            <local:SupportedFunction Description="Addition or subtraction" Expression="expression op = ('+'|'-') expression" />
+            <local:SupportedFunction Description="expr_1 nth root of expr_2" Expression="expression (~|//) expression" />
+            <local:SupportedFunction Description="Multiplication or division" Expression="expression (*|/) expression" />
+            <local:SupportedFunction Description="Addition or subtraction" Expression="expression (+|-) expression" />
             <local:SupportedFunction Description="Single integer or float number" Expression="NUMBER" />
-            <local:SupportedFunction Description="Minimum" Expression="MIN '(' expression (';' expression)* ')'" />
-            <local:SupportedFunction Description="Maximum" Expression="MAX '(' expression (';' expression)* ')'" />
-            <local:SupportedFunction Description="Description within parentheses" Expression="'(' expression ')'" />
-            <local:SupportedFunction Description="Mathematical constant pi = 3,141593" Expression="PI '()'?" />
+            <local:SupportedFunction Description="Minimum" Expression="MIN ( expression (; expression)* )" />
+            <local:SupportedFunction Description="Maximum" Expression="MAX ( expression (; expression)* )" />
+            <local:SupportedFunction Description="Description within parentheses" Expression="( expression )" />
+            <local:SupportedFunction Description="Mathematical constant pi = 3,141593" Expression="PI ()?" />
             <local:SupportedFunction Description="Exponent, e.g. 10e+43" Expression="expression E+ expression" />
             <local:SupportedFunction Description="Inverted Exponent, e.g. 10e-43" Expression="expression E- expression" />
             <local:SupportedFunction Description="Mathematical constant e = 2,718282" Expression="EULER" />
-            <local:SupportedFunction Description="Unary minus sign (negative numbers)" Expression="'-' expression" />
-            <local:SupportedFunction Description="Unary plus sign (positive numbers)" Expression="'+' expression" />
-            <local:SupportedFunction Description="Expression without multiplication sign, e.g. 2(3) -&gt; 2*(3)" Expression="'(' expression ')' expression" />
-            <local:SupportedFunction Description="Expression without multiplication sign, e.g. 2(3) -&gt; 2*(3)" Expression="expression '(' expression ')'" />
+            <local:SupportedFunction Description="Unary minus sign (negative numbers)" Expression="- expression" />
+            <local:SupportedFunction Description="Unary plus sign (positive numbers)" Expression="+ expression" />
+            <local:SupportedFunction Description="Expression without multiplication sign, e.g. 2(3) -&gt; 2*(3)" Expression="( expression ) expression" />
+            <local:SupportedFunction Description="Expression without multiplication sign, e.g. 2(3) -&gt; 2*(3)" Expression="expression ( expression )" />
             <local:SupportedFunction Description="Comments in Formulas. E.g., 4'Length'*3'Width' resolves to 12" Expression="... /* text */... or, ... ' text ' ... or, ... &quot; text &quot; ..." />
             <local:SupportedFunction Description="Trailing comments terminating formulas. E.g., 1 + 3; As per our counting" Expression="expression; text" />
           </x:Array>
@@ -220,6 +219,7 @@
                   BorderBrush="{DynamicResource GridRowBorderColor}"
                   BorderThickness="{DynamicResource GridRowBorderThickness}"
                   CornerRadius="{DynamicResource GridRowRounding}"
+                  KeyDown="Page_KeyDown"
                   SnapsToDevicePixels="True">
                   <SelectiveScrollingGrid>
                     <SelectiveScrollingGrid.ColumnDefinitions>
