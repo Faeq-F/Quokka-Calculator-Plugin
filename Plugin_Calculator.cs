@@ -9,7 +9,7 @@ namespace Plugin_Calculator {
   /// <summary>
   /// The calculator plugin
   /// </summary>
-  public partial class Calculator : IPlugger {
+  public partial class Calculator : Plugin {
     private Assembly? danglCalculator;
     private Type? calculator;
     private Type? result;
@@ -24,7 +24,6 @@ namespace Plugin_Calculator {
     /// Loads Plugin specific settings
     /// </summary>
     public Calculator() {
-      //Get Plugin Specific settings
       string fileName = Environment.CurrentDirectory + "\\PlugBoard\\Plugin_Calculator\\Plugin\\settings.json";
       PluginSettings = JsonConvert.DeserializeObject<PluginSettings>(File.ReadAllText(fileName))!;
     }
@@ -32,12 +31,9 @@ namespace Plugin_Calculator {
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public string PluggerName { get; set; } = "Calculator";
+    public override string PluggerName { get; set; } = "Calculator";
 
-    /// <summary>
-    /// Tries to calculate the query as a mathematical expression. If the expression is valid, a list item is made.
-    /// </summary>
-    public List<ListItem> OnQueryChange(string query) {
+    private List<ListItem> ProduceItems(string query) {
       List<ListItem> ItemList = new();
       try {
         object? calculation = calculate!.Invoke(null, new object[] { query });
@@ -51,10 +47,17 @@ namespace Plugin_Calculator {
     }
 
     /// <summary>
+    /// Tries to calculate the query as a mathematical expression. If the expression is valid, a list item is made.
+    /// </summary>
+    public override List<ListItem> OnQueryChange(string query) {
+      return ProduceItems(query);
+    }
+
+    /// <summary>
     /// <inheritdoc />
     /// Loads the Dangl.Calculator assembly.
     /// </summary>
-    public void OnAppStartup() {
+    public override void OnAppStartup() {
       danglCalculator = Assembly.LoadFrom(
           Environment.CurrentDirectory
               + "\\PlugBoard\\Plugin_Calculator\\Plugin\\Dangl.Calculator.dll"
@@ -68,36 +71,23 @@ namespace Plugin_Calculator {
       validityProp = result.GetProperty("IsValid")!;
     }
 
-    #region do nothing
-
     /// <summary>
-    /// Does Nothing - Inherited from IPlugger;
-    /// <inheritdoc />
+    /// <inheritdoc/>
     /// </summary>
-    public void OnAppShutdown() { }
-
-    /// <summary>
-    /// Does Nothing - Inherited from IPlugger;
-    /// <inheritdoc />
-    /// </summary>
-    public void OnSearchWindowStartup() { }
-
-    /// <summary>
-    /// Does Nothing - Inherited from IPlugger;
-    /// <inheritdoc />
-    /// </summary>
-    public List<String> SpecialCommands() {
-      return new List<String>();
+    /// <returns>
+    /// The CalculatorSignifier from plugin settings
+    /// </returns>
+    public override List<string> CommandSignifiers() {
+      return new List<string>() { PluginSettings.CalculatorSignifier };
     }
 
     /// <summary>
-    /// Does Nothing - Inherited from IPlugger;
-    /// <inheritdoc />
+    /// <inheritdoc/>
     /// </summary>
-    public List<ListItem> OnSpecialCommand(string command) {
-      return new List<ListItem>();
+    /// <param name="command">The CalculatorSignifier (Since there is only 1 signifier for this plugin), followed by the mathematical expression to be evaluated</param>
+    public override List<ListItem> OnSignifier(string command) {
+      return ProduceItems(command.Substring(PluginSettings.CalculatorSignifier.Length));
     }
 
-    #endregion
   }
 }

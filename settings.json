@@ -1,4 +1,5 @@
 {
+  "CalculatorSignifier": "= ",
   "SupportedFunctionsGrid": {
     "GridMargin": "10",
     "GridPadding": "0",

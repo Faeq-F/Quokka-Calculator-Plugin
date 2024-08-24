@@ -78,6 +78,13 @@ public class PluginSettings {
   /// The style settings for the Supported Functions grid
   /// </summary>
   public SupportedFunctionsGrid SupportedFunctionsGrid { get; set; } = new();
+
+  /// <summary>
+  /// The command signifier used to only show the result item from this plugin (defaults to "= ")<br />
+  /// Using this signifier does not change the output of this plugin, it only
+  /// ensures that no other plugins' results are included in the search window results list
+  /// </summary>
+  public string CalculatorSignifier { get; set; } = "= ";
 }
 
 /// <summary>

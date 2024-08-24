@@ -1,4 +1,5 @@
-﻿using Quokka.ListItems;
+﻿using Quokka;
+using Quokka.ListItems;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -62,7 +63,7 @@ namespace Plugin_Calculator {
           System.Windows.Clipboard.SetText(function.Expression);
           ReturnToSearch();
           break;
-        case Key.Apps: //This is the menu key
+        case var value when value == (System.Windows.Input.Key) App.Current.Resources["ContextPaneKey"]:
           ReturnToSearch();
           break;
         default:
