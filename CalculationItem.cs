@@ -1,5 +1,6 @@
 ﻿using Quokka;
 using Quokka.ListItems;
+using Quokka.PluginArch;
 using System.Windows.Media.Imaging;
 
 namespace Plugin_Calculator {
@@ -12,7 +13,9 @@ namespace Plugin_Calculator {
     public CalculationItem(string calculationResult) {
       Name = calculationResult;
       Description = "Menu key will show all supported functions";
-      Icon = new BitmapImage(new Uri(Environment.CurrentDirectory + "\\PlugBoard\\Plugin_Calculator\\Plugin\\calculator.png"));
+      UiDispatcher.BeginInvoke(() => {
+        Icon = new BitmapImage(new System.Uri(Environment.CurrentDirectory + "\\PlugBoard\\Plugin_Calculator\\Plugin\\calculator.png"));
+      });
     }
 
     /// <summary>
