@@ -1,15 +1,18 @@
 using Newtonsoft.Json;
 using Quokka.ListItems;
 using Quokka.PluginArch;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 
-namespace Plugin_Calculator {
+namespace PluginCalculator
+{
 
   /// <summary>
   /// The calculator plugin
   /// </summary>
-  public partial class Calculator : Plugin {
+  public partial class Calculator : Plugin
+  {
     private Assembly? danglCalculator;
     private Type? calculator;
     private Type? result;
@@ -23,33 +26,39 @@ namespace Plugin_Calculator {
     /// <summary>
     /// Loads Plugin specific settings
     /// </summary>
-    public Calculator() {
-      string fileName = Environment.CurrentDirectory + "\\PlugBoard\\Plugin_Calculator\\Plugin\\settings.json";
+    public Calculator()
+    {
+      string fileName = Environment.CurrentDirectory + "\\PlugBoard\\PluginCalculator\\Plugin\\settings.json";
       PluginSettings = JsonConvert.DeserializeObject<PluginSettings>(File.ReadAllText(fileName))!;
     }
 
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public override string PluggerName { get; set; } = "Calculator";
+    public override string PluginName { get; set; } = "Calculator";
 
-    private List<ListItem> ProduceItems(string query) {
-      List<ListItem> ItemList = new();
-      try {
+    private Collection<ListItem> ProduceItems(string query)
+    {
+      Collection<ListItem> ItemList = new();
+      try
+      {
         object? calculation = calculate!.Invoke(null, new object[] { query });
-        if (calculation == null ? false : (bool) validityProp!.GetValue(calculation)) {
+        if (calculation != null && (bool)validityProp!.GetValue(calculation))
+        {
           ItemList.Add(
               new CalculationItem(resultProp!.GetValue(calculation)!.ToString()!)
           );
         }
-      } catch (Exception) { }
+      }
+      catch (Exception) { }
       return ItemList;
     }
 
     /// <summary>
     /// Tries to calculate the query as a mathematical expression. If the expression is valid, a list item is made.
     /// </summary>
-    public override List<ListItem> OnQueryChange(string query) {
+    public override Collection<ListItem> OnQueryChange(string query)
+    {
       return ProduceItems(query);
     }
 
@@ -57,10 +66,11 @@ namespace Plugin_Calculator {
     /// <inheritdoc />
     /// Loads the Dangl.Calculator assembly.
     /// </summary>
-    public override void OnAppStartup() {
+    public override void OnAppStartup()
+    {
       danglCalculator = Assembly.LoadFrom(
           Environment.CurrentDirectory
-              + "\\PlugBoard\\Plugin_Calculator\\Plugin\\Dangl.Calculator.dll"
+              + "\\PlugBoard\\PluginCalculator\\Plugin\\Dangl.Calculator.dll"
       );
 
       calculator = danglCalculator.GetType("Dangl.Calculator.Calculator")!;
@@ -77,15 +87,18 @@ namespace Plugin_Calculator {
     /// <returns>
     /// The CalculatorSignifier from plugin settings
     /// </returns>
-    public override List<string> CommandSignifiers() {
-      return new List<string>() { PluginSettings.CalculatorSignifier };
+    public override Collection<string> CommandSignifiers()
+    {
+      return new Collection<string>() { PluginSettings.CalculatorSignifier };
     }
 
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
     /// <param name="command">The CalculatorSignifier (Since there is only 1 signifier for this plugin), followed by the mathematical expression to be evaluated</param>
-    public override List<ListItem> OnSignifier(string command) {
+    public override Collection<ListItem> OnSignifier(string command)
+    {
+      command ??= "";
       return ProduceItems(command.Substring(PluginSettings.CalculatorSignifier.Length));
     }
 
