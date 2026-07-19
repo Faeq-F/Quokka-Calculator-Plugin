@@ -11,6 +11,7 @@ namespace PluginCalculator
   /// <summary>
   /// The calculator plugin
   /// </summary>
+#pragma warning disable CA1724 // Type name conflicts with Dangl.Calculator namespace name
   public partial class Calculator : Plugin
   {
     private Assembly? danglCalculator;

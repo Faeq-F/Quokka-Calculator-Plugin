@@ -1,10 +1,10 @@
-﻿using Quokka;
+using Quokka;
 using Quokka.ListItems;
 using Quokka.PluginArch;
 
 namespace PluginCalculator
 {
-  class CalculationItem : ListItem
+  sealed class CalculationItem : ListItem
   {
 
     /// <summary>
