@@ -18,20 +18,22 @@ namespace PluginCalculator
     private Type? calculator;
     private Type? result;
     private MethodInfo? calculate;
-    PropertyInfo? resultProp;
-    PropertyInfo? validityProp;
+    private PropertyInfo? resultProp;
+    private PropertyInfo? validityProp;
+    private static readonly Lazy<PluginSettings> _lazyPluginSettings = new(() =>
+    {
+      string fileName = Path.Combine(Environment.CurrentDirectory, "PlugBoard", "PluginCalculator", "Plugin", "settings.json");
+      return File.Exists(fileName)
+        ? JsonConvert.DeserializeObject<PluginSettings>(File.ReadAllText(fileName)) ?? new PluginSettings()
+        : new PluginSettings();
+    });
 
-    private static PluginSettings pluginSettings = new();
-    internal static PluginSettings PluginSettings { get => pluginSettings; set => pluginSettings = value; }
+    internal static PluginSettings PluginSettings => _lazyPluginSettings.Value;
 
     /// <summary>
-    /// Loads Plugin specific settings
+    /// Initializes a new instance of the <see cref="Calculator"/> class.
     /// </summary>
-    public Calculator()
-    {
-      string fileName = Environment.CurrentDirectory + "\\PlugBoard\\PluginCalculator\\Plugin\\settings.json";
-      PluginSettings = JsonConvert.DeserializeObject<PluginSettings>(File.ReadAllText(fileName))!;
-    }
+    public Calculator() { }
 
     /// <summary>
     /// <inheritdoc/>
@@ -41,17 +43,31 @@ namespace PluginCalculator
     private Collection<ListItem> ProduceItems(string query)
     {
       Collection<ListItem> ItemList = new();
+      if (calculate is null || validityProp is null || resultProp is null)
+      {
+        return ItemList;
+      }
+
       try
       {
-        object? calculation = calculate!.Invoke(null, new object[] { query });
-        if (calculation != null && (bool)validityProp!.GetValue(calculation))
+        object? calculation = calculate.Invoke(null, [query]);
+        if (calculation != null)
         {
-          ItemList.Add(
-              new CalculationItem(resultProp!.GetValue(calculation)!.ToString()!)
-          );
+          object? isValidObj = validityProp.GetValue(calculation);
+          if (isValidObj is bool isValid && isValid)
+          {
+            object? resultObj = resultProp.GetValue(calculation);
+            if (resultObj?.ToString() is string calculationResult)
+            {
+              ItemList.Add(new CalculationItem(calculationResult));
+            }
+          }
         }
       }
-      catch (Exception) { }
+      catch (TargetInvocationException)
+      {
+        // Ignore evaluation exceptions thrown by Dangl.Calculator when parsing invalid or partial math queries
+      }
       return ItemList;
     }
 
@@ -69,17 +85,26 @@ namespace PluginCalculator
     /// </summary>
     public override void OnAppStartup()
     {
-      danglCalculator = Assembly.LoadFrom(
-          Environment.CurrentDirectory
-              + "\\PlugBoard\\PluginCalculator\\Plugin\\Dangl.Calculator.dll"
-      );
+      string dllPath = Path.Combine(Environment.CurrentDirectory, "PlugBoard", "PluginCalculator", "Plugin", "Dangl.Calculator.dll");
+      if (!File.Exists(dllPath))
+      {
+        return;
+      }
 
-      calculator = danglCalculator.GetType("Dangl.Calculator.Calculator")!;
-      calculate = calculator.GetMethod("Calculate", new Type[] { typeof(string) })!;
+      try
+      {
+        danglCalculator = Assembly.LoadFrom(dllPath);
+        calculator = danglCalculator?.GetType("Dangl.Calculator.Calculator");
+        calculate = calculator?.GetMethod("Calculate", [typeof(string)]);
 
-      result = danglCalculator.GetType("Dangl.Calculator.CalculationResult")!;
-      resultProp = result.GetProperty("Result")!;
-      validityProp = result.GetProperty("IsValid")!;
+        result = danglCalculator?.GetType("Dangl.Calculator.CalculationResult");
+        resultProp = result?.GetProperty("Result");
+        validityProp = result?.GetProperty("IsValid");
+      }
+      catch (Exception ex)
+      {
+        System.Diagnostics.Debug.WriteLine($"Error loading Dangl.Calculator assembly: {ex.Message}");
+      }
     }
 
     /// <summary>

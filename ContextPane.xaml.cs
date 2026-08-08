@@ -1,7 +1,8 @@
-﻿using Quokka;
 using Quokka.ListItems;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Keys = System.Windows.Forms.Keys;
 using static Quokka.Settings.SettingParsers;
 
 namespace PluginCalculator
@@ -22,31 +23,31 @@ namespace PluginCalculator
       #region settings
       SupportedFunctionsTable.GridLinesVisibility = DataGridGridLinesVisibility.None;
       //Grid
-      this.Resources.Add("GridMargin", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridMargin));
-      this.Resources.Add("GridPadding", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridPadding));
-      this.Resources.Add("GridBackgroundColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridBackgroundColor));
-      this.Resources.Add("GridBorderColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridBorderColor));
-      this.Resources.Add("GridBorderThickness", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridBorderThickness));
-      this.Resources.Add("GridRounding", ParseCornerRadiusSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRounding));
-      this.Resources.Add("GridCellBorderColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridCellBorderColor));
-      this.Resources.Add("GridCellBorderThickness", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridCellBorderThickness));
+      Resources.Add("GridMargin", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridMargin));
+      Resources.Add("GridPadding", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridPadding));
+      Resources.Add("GridBackgroundColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridBackgroundColor));
+      Resources.Add("GridBorderColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridBorderColor));
+      Resources.Add("GridBorderThickness", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridBorderThickness));
+      Resources.Add("GridRounding", ParseCornerRadiusSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRounding));
+      Resources.Add("GridCellBorderColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridCellBorderColor));
+      Resources.Add("GridCellBorderThickness", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridCellBorderThickness));
       //Column Headers
-      this.Resources.Add("GridColumnHeadersHorizontalAlignment", ParseHorizontalAlignmentSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersHorizontalAlignment));
-      this.Resources.Add("GridColumnHeadersBackground", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersBackground));
-      this.Resources.Add("GridColumnHeadersBorderColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersBorderColor));
-      this.Resources.Add("GridColumnHeadersBorderThickness", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersBorderThickness));
-      this.Resources.Add("GridColumnHeadersRounding", ParseCornerRadiusSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersRounding));
-      this.Resources.Add("GridColumnHeadersTxtColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersTxtColor));
-      this.Resources.Add("GridColumnHeadersTxtSize", ParseDoubleSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersTxtSize));
-      this.Resources.Add("GridColumnHeadersTxtWeight", ParseFontWeight(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersTxtWeight));
+      Resources.Add("GridColumnHeadersHorizontalAlignment", ParseHorizontalAlignmentSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersHorizontalAlignment));
+      Resources.Add("GridColumnHeadersBackground", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersBackground));
+      Resources.Add("GridColumnHeadersBorderColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersBorderColor));
+      Resources.Add("GridColumnHeadersBorderThickness", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersBorderThickness));
+      Resources.Add("GridColumnHeadersRounding", ParseCornerRadiusSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersRounding));
+      Resources.Add("GridColumnHeadersTxtColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersTxtColor));
+      Resources.Add("GridColumnHeadersTxtSize", ParseDoubleSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersTxtSize));
+      Resources.Add("GridColumnHeadersTxtWeight", ParseFontWeight(Calculator.PluginSettings.SupportedFunctionsGrid.GridColumnHeaders.GridColumnHeadersTxtWeight));
       //Rows
-      this.Resources.Add("GridRowColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowColor));
-      this.Resources.Add("GridRowBorderColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowBorderColor));
-      this.Resources.Add("GridRowBorderThickness", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowBorderThickness));
-      this.Resources.Add("GridRowRounding", ParseCornerRadiusSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowRounding));
-      this.Resources.Add("GridRowTxtColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowTxtColor));
-      this.Resources.Add("GridRowTxtSize", ParseDoubleSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowTxtSize));
-      this.Resources.Add("SelectedGridRowTxtColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.SelectedGridRowTxtColor));
+      Resources.Add("GridRowColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowColor));
+      Resources.Add("GridRowBorderColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowBorderColor));
+      Resources.Add("GridRowBorderThickness", ParseThicknessSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowBorderThickness));
+      Resources.Add("GridRowRounding", ParseCornerRadiusSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowRounding));
+      Resources.Add("GridRowTxtColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowTxtColor));
+      Resources.Add("GridRowTxtSize", ParseDoubleSetting(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.GridRowTxtSize));
+      Resources.Add("SelectedGridRowTxtColor", ParseSolidColorBrush(Calculator.PluginSettings.SupportedFunctionsGrid.GridRows.SelectedGridRowTxtColor));
       #endregion
     }
 
@@ -60,21 +61,20 @@ namespace PluginCalculator
     {
       if (e != null)
       {
-        switch (e.Key)
+        if (e.Key == Key.Enter)
         {
-          case Key.Enter:
-            //copy expression from selected row
-            SupportedFunction function = (SupportedFunction)SupportedFunctionsTable.SelectedItem;
-            System.Windows.Clipboard.SetText(function.Expression);
-            ReturnToSearch();
-            break;
-          case var value when value == (System.Windows.Input.Key)App.Current.Resources["ContextPaneKey"]:
-            ReturnToSearch();
-            break;
-          default:
-            return;
+          if (SupportedFunctionsTable.SelectedItem is SupportedFunction function && function.Expression is not null)
+          {
+            Clipboard.SetText(function.Expression);
+          }
+          ReturnToSearch();
+          e.Handled = true;
         }
-        e.Handled = true;
+        else if (e.Key == KeyInterop.KeyFromVirtualKey((int)(Keys)Application.Current.Resources["ContextPaneKey"]))
+        {
+          ReturnToSearch();
+          e.Handled = true;
+        }
       }
     }
   }

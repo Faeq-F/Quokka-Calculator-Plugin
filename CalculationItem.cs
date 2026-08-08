@@ -1,10 +1,10 @@
-using Quokka;
 using Quokka.ListItems;
 using Quokka.PluginArch;
+using System.Windows;
 
 namespace PluginCalculator
 {
-  sealed class CalculationItem : ListItem
+  internal sealed class CalculationItem : ListItem
   {
 
     /// <summary>
@@ -25,8 +25,8 @@ namespace PluginCalculator
     /// </summary>
     public override void Execute()
     {
-      System.Windows.Clipboard.SetText(Name);
-      App.Current.MainWindow.Close();
+      Clipboard.SetText(Name);
+      Application.Current.MainWindow.Close();
     }
   }
 }

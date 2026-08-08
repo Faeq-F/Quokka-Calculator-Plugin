@@ -1,3 +1,5 @@
+using Quokka.ListItems;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace PluginCalculator.Tests
@@ -20,7 +22,7 @@ namespace PluginCalculator.Tests
       // Clean up legacy directories from previous runs
       try
       {
-        foreach (var dir in Directory.GetDirectories(_originalCurrentDirectory, "TempCalculator_*"))
+        foreach (string? dir in Directory.GetDirectories(_originalCurrentDirectory, "TempCalculator_*"))
         {
           try
           {
@@ -45,12 +47,12 @@ namespace PluginCalculator.Tests
       Directory.CreateDirectory(targetPluginDir);
 
       // Copy DLL and settings.json from the build output
-      string buildOutputPlugBoard = @"C:\Users\faeqf\Documents\git\Quokka\BuildOutput\Quokka\PlugBoard";
+      const string buildOutputPlugBoard = @"C:\Users\faeqf\Documents\git\Quokka\BuildOutput\Quokka\PlugBoard";
       string sourcePluginDir = Path.Combine(buildOutputPlugBoard, "PluginCalculator", "Plugin");
 
       if (Directory.Exists(sourcePluginDir))
       {
-        foreach (var file in Directory.GetFiles(sourcePluginDir))
+        foreach (string? file in Directory.GetFiles(sourcePluginDir))
         {
           File.Copy(file, Path.Combine(targetPluginDir, Path.GetFileName(file)), overwrite: true);
         }
@@ -67,7 +69,7 @@ namespace PluginCalculator.Tests
     public void TestCalculator_CalculatesMathematicalExpressions()
     {
       // 1. Instantiate the plugin (reads settings.json)
-      var calc = new Calculator();
+      Calculator calc = new();
 
       // 2. Initialize it (loads Dangl.Calculator.dll)
       calc.OnAppStartup();
@@ -76,17 +78,17 @@ namespace PluginCalculator.Tests
       calc.CommandSignifiers().Should().ContainSingle().Which.Should().Be("= ");
 
       // 4. Test math evaluation on query change
-      var results = calc.OnQueryChange("5 + 5 * 2");
+      Collection<ListItem> results = calc.OnQueryChange("5 + 5 * 2");
       results.Should().ContainSingle();
-      results.First().Name.Should().Be("15");
+      results[0].Name.Should().Be("15");
 
       // 5. Test signifier calculation execution
-      var signifierResults = calc.OnSignifier("= (10 - 2) / 4");
+      Collection<ListItem> signifierResults = calc.OnSignifier("= (10 - 2) / 4");
       signifierResults.Should().ContainSingle();
-      signifierResults.First().Name.Should().Be("2");
+      signifierResults[0].Name.Should().Be("2");
 
       // 6. Test invalid math expressions do not crash and return empty
-      var invalidResults = calc.OnQueryChange("5 + ");
+      Collection<ListItem> invalidResults = calc.OnQueryChange("5 + ");
       invalidResults.Should().BeEmpty();
     }
 
@@ -107,6 +109,7 @@ namespace PluginCalculator.Tests
       {
         // Ignore locked files
       }
+      GC.SuppressFinalize(this);
     }
   }
 }
