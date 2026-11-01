@@ -14,6 +14,12 @@ namespace PluginCalculator
 #pragma warning disable CA1724 // Type name conflicts with Dangl.Calculator namespace name
   public partial class Calculator : Plugin
   {
+    /// <summary>
+    /// Gets the icon for the calculator plugin.
+    /// </summary>
+    public override System.Windows.Media.ImageSource? PluginIcon =>
+      IconCache.GetOrAdd(Path.Combine(Environment.CurrentDirectory, "PlugBoard", "PluginCalculator", "Plugin", "calculator.png"));
+
     private Assembly? danglCalculator;
     private Type? calculator;
     private Type? result;
